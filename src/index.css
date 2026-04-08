@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 35 30% 96%;
+    --foreground: 25 20% 15%;
+
+    --card: 38 35% 97%;
+    --card-foreground: 25 20% 15%;
+
+    --popover: 38 35% 97%;
+    --popover-foreground: 25 20% 15%;
+
+    --primary: 18 60% 45%;
+    --primary-foreground: 38 40% 97%;
+
+    --secondary: 35 25% 90%;
+    --secondary-foreground: 25 20% 25%;
+
+    --muted: 35 20% 92%;
+    --muted-foreground: 25 10% 50%;
+
+    --accent: 200 45% 45%;
+    --accent-foreground: 200 90% 98%;
+
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 20% 85%;
+    --input: 30 20% 85%;
+    --ring: 18 60% 45%;
+
+    --radius: 0.75rem;
+
+    --calendar-paper: 40 30% 98%;
+    --calendar-shadow: 25 15% 70%;
+    --calendar-range: 18 55% 92%;
+    --calendar-range-mid: 18 40% 95%;
+    --calendar-today: 200 50% 50%;
+    --calendar-weekend: 0 50% 55%;
+    --calendar-holiday: 350 65% 55%;
+    --calendar-note-bg: 48 60% 95%;
+    --calendar-spiral: 220 10% 65%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 220 20% 10%;
+    --foreground: 35 20% 90%;
+
+    --card: 220 18% 13%;
+    --card-foreground: 35 20% 90%;
+
+    --popover: 220 18% 13%;
+    --popover-foreground: 35 20% 90%;
+
+    --primary: 22 70% 55%;
+    --primary-foreground: 220 20% 8%;
+
+    --secondary: 220 15% 18%;
+    --secondary-foreground: 35 20% 85%;
+
+    --muted: 220 15% 18%;
+    --muted-foreground: 220 10% 55%;
+
+    --accent: 200 50% 50%;
+    --accent-foreground: 200 90% 95%;
+
+    --destructive: 0 60% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 22%;
+    --input: 220 15% 22%;
+    --ring: 22 70% 55%;
+
+    --calendar-paper: 220 18% 13%;
+    --calendar-shadow: 220 15% 5%;
+    --calendar-range: 22 50% 20%;
+    --calendar-range-mid: 22 30% 16%;
+    --calendar-today: 200 55% 55%;
+    --calendar-weekend: 0 45% 60%;
+    --calendar-holiday: 350 60% 60%;
+    --calendar-note-bg: 40 30% 18%;
+    --calendar-spiral: 220 10% 40%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+  .font-sans {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .calendar-paper {
+    background-color: hsl(var(--calendar-paper));
+    box-shadow:
+      0 2px 8px -2px hsl(var(--calendar-shadow) / 0.15),
+      0 8px 24px -4px hsl(var(--calendar-shadow) / 0.1),
+      4px 4px 0 -1px hsl(var(--calendar-paper)),
+      4px 4px 8px -1px hsl(var(--calendar-shadow) / 0.1),
+      4px 4px 0 -1px hsl(var(--calendar-paper)),
+      8px 8px 8px -2px hsl(var(--calendar-shadow) / 0.08);
+  }
+  .calendar-range-bg {
+    background-color: hsl(var(--calendar-range));
+  }
+  .calendar-range-mid-bg {
+    background-color: hsl(var(--calendar-range-mid));
+  }
+}
+
+@keyframes page-flip {
+  0% { transform: perspective(1200px) rotateY(0deg); opacity: 1; }
+  50% { transform: perspective(1200px) rotateY(-90deg); opacity: 0.6; }
+  100% { transform: perspective(1200px) rotateY(0deg); opacity: 1; }
+}
+
+@keyframes fade-slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes note-appear {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-page-flip {
+  animation: page-flip 0.5s ease-in-out;
+}
+
+.animate-fade-slide-up {
+  animation: fade-slide-up 0.35s ease-out;
+}
+
+.animate-note-appear {
+  animation: note-appear 0.25s ease-out;
+}
