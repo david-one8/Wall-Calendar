@@ -33,6 +33,21 @@ const MONTH_ALT: Record<number, string> = {
   11: "Cozy winter village under starry sky",
 };
 
+const MONTH_MOODS: Record<number, string> = {
+  0: "Quiet beginnings",
+  1: "Soft blossoms",
+  2: "Fresh momentum",
+  3: "Field notes",
+  4: "Golden days",
+  5: "Coastal calm",
+  6: "Sunlit plans",
+  7: "Late summer glow",
+  8: "New routines",
+  9: "Amber evenings",
+  10: "Reflective pace",
+  11: "Winter rituals",
+};
+
 interface CalendarHeroImageProps {
   month: number;
 }
@@ -58,7 +73,7 @@ const CalendarHeroImage = ({ month }: CalendarHeroImageProps) => {
   }, [displayMonth, month]);
 
   return (
-    <div className="relative overflow-hidden h-48 sm:h-56 lg:h-64">
+    <div className="calendar-hero relative overflow-hidden h-52 sm:h-60 lg:h-72">
       {/* Previous image (fades out) */}
       <img
         src={MONTH_IMAGES[prevMonth]}
@@ -79,7 +94,13 @@ const CalendarHeroImage = ({ month }: CalendarHeroImageProps) => {
         width={1280}
         height={720}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-calendar-paper/30 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent pointer-events-none" />
+      <div className="calendar-hero-caption-wrap absolute inset-x-0 bottom-0 p-4 sm:p-6 pointer-events-none">
+        <div className="calendar-hero-caption inline-flex flex-col gap-2 px-4 py-3 text-white">
+          <span className="calendar-hero-kicker text-[10px] uppercase tracking-[0.3em] text-white/70">Seasonal Frame</span>
+          <strong className="font-display text-2xl sm:text-3xl">{MONTH_MOODS[displayMonth]}</strong>
+        </div>
+      </div>
     </div>
   );
 };
