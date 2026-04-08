@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="calendar-bg" x1="10" y1="8" x2="54" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f59e0b" />
+      <stop offset="1" stop-color="#c2410c" />
+    </linearGradient>
+  </defs>
+  <rect x="10" y="12" width="44" height="42" rx="10" fill="url(#calendar-bg)" />
+  <rect x="10" y="12" width="44" height="12" rx="10" fill="#7c2d12" />
+  <path d="M20 8v10M44 8v10" fill="none" stroke="#fef3c7" stroke-linecap="round" stroke-width="4" />
+  <rect x="18" y="30" width="8" height="8" rx="2" fill="#fff7ed" />
+  <rect x="28" y="30" width="8" height="8" rx="2" fill="#fde68a" />
+  <rect x="38" y="30" width="8" height="8" rx="2" fill="#fff7ed" />
+  <rect x="18" y="40" width="8" height="8" rx="2" fill="#fff7ed" />
+  <rect x="28" y="40" width="8" height="8" rx="2" fill="#fff7ed" />
+  <rect x="38" y="40" width="8" height="8" rx="2" fill="#fff7ed" />
+</svg>
