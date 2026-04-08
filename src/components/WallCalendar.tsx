@@ -1,14 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import {
-  getCalendarDays,
-  DateRange,
-  CalendarNote,
-  loadNotes,
-  saveNotes,
-  addMonths,
-  subMonths,
-  isSameDay,
-} from "@/lib/calendar-utils";
+import { getCalendarDays, DateRange, CalendarNote, loadNotes, saveNotes, addMonths, subMonths } from "@/lib/calendar-utils";
 import CalendarSpiral from "./CalendarSpiral";
 import CalendarHeroImage from "./CalendarHeroImage";
 import CalendarHeader from "./CalendarHeader";
@@ -76,10 +67,14 @@ const WallCalendar = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-6 lg:p-8">
-      <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-4 lg:gap-6">
+    <div className="calendar-stage min-h-screen p-4 sm:p-6 lg:p-8">
+      <div className="calendar-stage-decoration calendar-stage-decoration-left" />
+      <div className="calendar-stage-decoration calendar-stage-decoration-right" />
+
+      <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-5">
+        <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-4 lg:gap-6">
         {/* Calendar Panel */}
-        <div className="flex-1 calendar-paper rounded-xl overflow-hidden">
+        <div className="flex-1 calendar-paper calendar-panel rounded-[1.5rem] overflow-hidden">
           <CalendarSpiral />
           <CalendarHeroImage month={currentMonth.getMonth()} />
           <CalendarHeader
@@ -100,24 +95,30 @@ const WallCalendar = () => {
             isSelecting={isSelecting}
           />
           {/* Footer */}
-          <div className="flex items-center justify-center gap-4 px-4 py-2 text-[10px] text-muted-foreground border-t border-border/50">
-            <span className="flex items-center gap-1">
+          <div className="calendar-legend">
+            <span className="calendar-legend-item">
               <span className="w-2 h-2 rounded-full bg-calendar-today" /> Today
             </span>
-            <span className="flex items-center gap-1">
+            <span className="calendar-legend-item">
               <span className="w-2 h-2 rounded-full bg-calendar-weekend" /> Weekend
             </span>
-            <span className="flex items-center gap-1">
+            <span className="calendar-legend-item">
               <span className="w-2 h-2 rounded-full bg-calendar-holiday" /> Holiday
             </span>
-            <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-primary" /> Selected
+            <span className="calendar-legend-item">
+              <span className="w-2 h-2 rounded-full bg-primary" /> Start
+            </span>
+            <span className="calendar-legend-item">
+              <span className="w-2 h-2 rounded-full border border-primary" /> End
+            </span>
+            <span className="calendar-legend-item">
+              <span className="w-2 h-2 rounded-full bg-calendar-range-mid" /> In Range
             </span>
           </div>
         </div>
 
         {/* Notes Panel */}
-        <div className="w-full lg:w-80 calendar-paper rounded-xl overflow-hidden flex flex-col min-h-[300px] lg:min-h-0">
+        <div className="w-full lg:w-80 calendar-paper notes-panel rounded-[1.5rem] overflow-hidden flex flex-col min-h-[300px] lg:min-h-0">
           <CalendarNotes
             notes={notes}
             selectedDate={selectedDate}
@@ -125,6 +126,7 @@ const WallCalendar = () => {
             onDelete={deleteNote}
           />
         </div>
+      </div>
       </div>
     </div>
   );
