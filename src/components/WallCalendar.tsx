@@ -1,5 +1,14 @@
-import { useState, useCallback, useEffect } from "react";
-import { getCalendarDays, DateRange, CalendarNote, loadNotes, saveNotes, addMonths, subMonths } from "@/lib/calendar-utils";
+import { useState, useCallback, useEffect, useRef } from "react";
+import {
+  getCalendarDays,
+  DateRange,
+  CalendarNote,
+  CalendarNoteInput,
+  loadNotes,
+  saveNotes,
+  addMonths,
+  subMonths,
+} from "@/lib/calendar-utils";
 import CalendarSpiral from "./CalendarSpiral";
 import CalendarHeroImage from "./CalendarHeroImage";
 import CalendarHeader from "./CalendarHeader";
@@ -15,6 +24,8 @@ const WallCalendar = () => {
   const [notes, setNotes] = useState<CalendarNote[]>(loadNotes);
   const [isFlipping, setIsFlipping] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [isTouchPreviewing, setIsTouchPreviewing] = useState(false);
+  const suppressClickRef = useRef(false);
 
   const days = getCalendarDays(currentMonth);
 
@@ -35,15 +46,22 @@ const WallCalendar = () => {
   const handleToday = () => flipAndSet(new Date());
 
   const handleDayClick = (date: Date) => {
+    if (suppressClickRef.current) {
+      suppressClickRef.current = false;
+      return;
+    }
+
     setSelectedDate(date);
     if (!range.start || (range.start && range.end)) {
       // Start new selection
       setRange({ start: date, end: null });
       setIsSelecting(true);
+      setHoverDate(date);
     } else {
       // Complete selection
       setRange({ start: range.start, end: date });
       setIsSelecting(false);
+      setHoverDate(date);
     }
   };
 
@@ -51,13 +69,40 @@ const WallCalendar = () => {
     if (isSelecting) setHoverDate(date);
   };
 
+  const handleTouchPreviewStart = (date: Date) => {
+    if (!isSelecting || !range.start || range.end) return;
+    setHoverDate(date);
+    setIsTouchPreviewing(true);
+  };
+
+  const handleTouchPreviewMove = (date: Date) => {
+    if (!isSelecting || !range.start || !isTouchPreviewing) return;
+    setHoverDate(date);
+  };
+
+  const handleTouchPreviewEnd = (date: Date) => {
+    if (!isSelecting || !range.start || !isTouchPreviewing) return;
+
+    setSelectedDate(date);
+    setRange({ start: range.start, end: date });
+    setHoverDate(date);
+    setIsSelecting(false);
+    setIsTouchPreviewing(false);
+    suppressClickRef.current = true;
+  };
+
+  const handleTouchPreviewCancel = () => {
+    setIsTouchPreviewing(false);
+  };
+
   const clearRange = () => {
     setRange({ start: null, end: null });
     setIsSelecting(false);
     setHoverDate(null);
+    setIsTouchPreviewing(false);
   };
 
-  const addNote = (note: Omit<CalendarNote, "id">) => {
+  const addNote = (note: CalendarNoteInput) => {
     const newNote: CalendarNote = { ...note, id: crypto.randomUUID() };
     setNotes((prev) => [...prev, newNote]);
   };
@@ -93,6 +138,10 @@ const WallCalendar = () => {
             onDayHover={handleDayHover}
             hoverDate={hoverDate}
             isSelecting={isSelecting}
+            onTouchPreviewStart={handleTouchPreviewStart}
+            onTouchPreviewMove={handleTouchPreviewMove}
+            onTouchPreviewEnd={handleTouchPreviewEnd}
+            onTouchPreviewCancel={handleTouchPreviewCancel}
           />
           {/* Footer */}
           <div className="calendar-legend">
@@ -122,6 +171,7 @@ const WallCalendar = () => {
           <CalendarNotes
             notes={notes}
             selectedDate={selectedDate}
+            range={range}
             onAdd={addNote}
             onDelete={deleteNote}
           />

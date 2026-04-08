@@ -6,8 +6,8 @@ import {
   isInRange,
   isRangeStart,
   isRangeEnd,
-  isSameDay,
   format,
+  noteMatchesDate,
 } from "@/lib/calendar-utils";
 
 interface CalendarGridProps {
@@ -18,19 +18,34 @@ interface CalendarGridProps {
   onDayHover: (date: Date) => void;
   hoverDate: Date | null;
   isSelecting: boolean;
+  onTouchPreviewStart: (date: Date) => void;
+  onTouchPreviewMove: (date: Date) => void;
+  onTouchPreviewEnd: (date: Date) => void;
+  onTouchPreviewCancel: () => void;
 }
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-const CalendarGrid = ({ days, range, notes, onDayClick, onDayHover, hoverDate, isSelecting }: CalendarGridProps) => {
+const CalendarGrid = ({
+  days,
+  range,
+  notes,
+  onDayClick,
+  onDayHover,
+  hoverDate,
+  isSelecting,
+  onTouchPreviewStart,
+  onTouchPreviewMove,
+  onTouchPreviewEnd,
+  onTouchPreviewCancel,
+}: CalendarGridProps) => {
   const previewRange: DateRange =
     isSelecting && range.start && hoverDate
       ? { start: range.start, end: hoverDate }
       : range;
 
   const hasNote = (date: Date) => {
-    const key = format(date, "yyyy-MM-dd");
-    return notes.some((n) => n.date === key);
+    return notes.some((note) => noteMatchesDate(note, date));
   };
 
   return (
@@ -61,9 +76,26 @@ const CalendarGrid = ({ days, range, notes, onDayClick, onDayHover, hoverDate, i
               key={i}
               onClick={() => onDayClick(day.date)}
               onMouseEnter={() => onDayHover(day.date)}
+              onPointerDown={(event) => {
+                if (event.pointerType !== "mouse") {
+                  onTouchPreviewStart(day.date);
+                }
+              }}
+              onPointerEnter={(event) => {
+                if (event.pointerType !== "mouse") {
+                  onTouchPreviewMove(day.date);
+                }
+              }}
+              onPointerUp={(event) => {
+                if (event.pointerType !== "mouse") {
+                  onTouchPreviewEnd(day.date);
+                }
+              }}
+              onPointerCancel={onTouchPreviewCancel}
               className={cn(
                 "calendar-day-card relative aspect-square flex flex-col items-center justify-center text-xs sm:text-sm transition-all duration-200 cursor-pointer",
                 "hover:-translate-y-0.5",
+                isSelecting && "touch-none",
                 !day.isCurrentMonth && "opacity-25",
                 day.isCurrentMonth && "opacity-100",
                 // Range background
