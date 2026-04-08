@@ -34,9 +34,9 @@ const CalendarGrid = ({ days, range, notes, onDayClick, onDayHover, hoverDate, i
   };
 
   return (
-    <div className="px-2 sm:px-4 pb-4">
+    <div className="calendar-grid px-2 sm:px-4 pb-5">
       {/* Weekday headers */}
-      <div className="grid grid-cols-7 mb-1">
+      <div className="grid grid-cols-7 mb-2 gap-1">
         {WEEKDAYS.map((d) => (
           <div
             key={d}
@@ -48,7 +48,7 @@ const CalendarGrid = ({ days, range, notes, onDayClick, onDayHover, hoverDate, i
       </div>
 
       {/* Day cells */}
-      <div className="grid grid-cols-7">
+      <div className="grid grid-cols-7 gap-1 sm:gap-1.5">
         {days.map((day, i) => {
           const inRange = isInRange(day.date, previewRange);
           const start = isRangeStart(day.date, previewRange);
@@ -62,8 +62,8 @@ const CalendarGrid = ({ days, range, notes, onDayClick, onDayHover, hoverDate, i
               onClick={() => onDayClick(day.date)}
               onMouseEnter={() => onDayHover(day.date)}
               className={cn(
-                "relative aspect-square flex flex-col items-center justify-center text-xs sm:text-sm transition-all duration-150 cursor-pointer",
-                "hover:scale-105",
+                "calendar-day-card relative aspect-square flex flex-col items-center justify-center text-xs sm:text-sm transition-all duration-200 cursor-pointer",
+                "hover:-translate-y-0.5",
                 !day.isCurrentMonth && "opacity-25",
                 day.isCurrentMonth && "opacity-100",
                 // Range background
@@ -72,12 +72,17 @@ const CalendarGrid = ({ days, range, notes, onDayClick, onDayHover, hoverDate, i
                 end && "rounded-r-lg",
                 inRange && start && !end && "rounded-r-none",
                 inRange && end && !start && "rounded-l-none",
+                start && "calendar-range-start-cell",
+                end && "calendar-range-end-cell",
               )}
             >
               <span
                 className={cn(
-                  "relative z-10 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full transition-all duration-150",
-                  selected && "bg-primary text-primary-foreground font-semibold shadow-md",
+                  "relative z-10 w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full transition-all duration-200",
+                  selected && "font-semibold shadow-md",
+                  start && "calendar-range-start-pill",
+                  end && "calendar-range-end-pill",
+                  selected && !start && !end && "bg-primary text-primary-foreground",
                   day.isToday && !selected && "ring-2 ring-calendar-today text-calendar-today font-bold",
                   day.isHoliday && !selected && !day.isToday && "text-calendar-holiday font-medium",
                   day.isWeekend && !selected && !day.isToday && !day.isHoliday && "text-calendar-weekend",
@@ -85,6 +90,16 @@ const CalendarGrid = ({ days, range, notes, onDayClick, onDayHover, hoverDate, i
               >
                 {format(day.date, "d")}
               </span>
+              {start && (
+                <span className="calendar-range-edge-label absolute top-1.5 left-1.5 sm:top-2 sm:left-2">
+                  Start
+                </span>
+              )}
+              {end && (
+                <span className="calendar-range-edge-label calendar-range-edge-label-end absolute top-1.5 right-1.5 sm:top-2 sm:right-2">
+                  End
+                </span>
+              )}
               {/* Note indicator dot */}
               {notePresent && day.isCurrentMonth && (
                 <span className="absolute bottom-0.5 sm:bottom-1 w-1 h-1 rounded-full bg-primary/60" />
